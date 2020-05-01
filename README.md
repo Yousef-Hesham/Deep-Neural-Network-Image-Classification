@@ -4,9 +4,9 @@ Deep Neural Network for Image Classification: Application. Includes functions to
 ## 1 - Packages
 Needed packages
 
-numpy is the fundamental package for scientific computing with Python.
-matplotlib is a library to plot graphs in Python.
-h5py is a common package to interact with a dataset that is stored on an H5 file.
+numpy is the fundamental package for scientific computing with Python.<br/>
+matplotlib is a library to plot graphs in Python.<br/>
+h5py is a common package to interact with a dataset that is stored on an H5 file.<br/>
 
 ## 2 - Outline of the Project
 
@@ -27,7 +27,6 @@ To build this neural network, we will be implementing several "helper functions"
 - Finally update the parameters.
 
 <img src="readmeimages/5.png" style="width:800px;height:500px;">
-<caption><center> Figure 1 </center></caption>
 
 **Note** that for every forward function, there is a corresponding backward function. That is why at every step of your forward module you will be storing some values in a cache. The cached values are useful for computing gradients. In the backpropagation module you will then use the cache to calculate the gradients. This assignment will show you exactly how to carry out each of these steps. 
 
@@ -43,7 +42,6 @@ Problem Statement: You are given a dataset ("data.h5") containing:
 standardizing and reshaping the images before feeding them to the network.
 
 <img src="readmeimages/1.png" title="FVCproductions">
-<caption><center> **Figure 2** </center></caption>
 
 ## 4 - General methodology
 The Deep Learning methodology to build the model:
@@ -102,7 +100,6 @@ Just like with forward propagation, you will implement helper functions for back
 
 **Reminder**: 
 <img src="readmeimages/6.png" style="width:650px;height:250px;">
-<caption><center> Figure 3 : Forward and Backward propagation for *LINEAR->RELU->LINEAR->SIGMOID* <br> *The purple blocks represent the forward propagation, and the red blocks represent the backward propagation.*  </center></caption>
 
 Now, similar to forward propagation, you are going to build the backward propagation in three steps:
 - LINEAR backward
@@ -116,7 +113,6 @@ For layer l, the linear part is: Z^{[l]} = W^{[l]} A^{[l-1]} + b^{[l]} (followed
 Suppose you have already calculated the derivative dZ^{[l]} = \frac{\partial \mathcal{L} }{\partial Z^{[l]}}. You want to get (dW^{[l]}, db^{[l]}, dA^{[l-1]}).
 
 <img src="readmeimages/7.png" style="width:250px;height:300px;">
-<caption><center> Figure 4 </center></caption>
 
 The three outputs (dW^{[l]}, db^{[l]}, dA^{[l-1]}) are computed using the input dZ^{[l]}.Here are the formulas you need:
  dW^{[l]} = \frac{\partial \mathcal{J} }{\partial W^{[l]}} = \frac{1}{m} dZ^{[l]} A^{[l-1] T} \tag{8}
@@ -145,11 +141,10 @@ If g(.) is the activation function,
 
 ### 4.8 - L-Model Backward [Backward propagation module]
 
-Now you will implement the backward function for the whole network. Recall that when you implemented the `L_model_forward` function, at each iteration, you stored a cache which contains (X,W,b, and z). In the back propagation module, you will use those variables to compute the gradients. Therefore, in the `L_model_backward` function, you will iterate through all the hidden layers backward, starting from layer L. On each step, you will use the cached values for layer l to backpropagate through layer l. Figure 5 below shows the backward pass. 
+Now you will implement the backward function for the whole network. Recall that when you implemented the `L_model_forward` function, at each iteration, you stored a cache which contains (X,W,b, and z). In the back propagation module, you will use those variables to compute the gradients. Therefore, in the `L_model_backward` function, you will iterate through all the hidden layers backward, starting from layer L. On each step, you will use the cached values for layer l to backpropagate through layer l.
 
 
 <img src="readmeimages/8.png" style="width:450px;height:300px;">
-<caption><center>  Figure 5 : Backward pass  </center></caption>
 
 **Initializing backpropagation**:
 To backpropagate through this network, we know that the output is, 
@@ -159,7 +154,7 @@ To do so, use this formula (derived using calculus which you don't need in-depth
 dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL)) # derivative of cost with respect to AL
 ```
 
-You can then use this post-activation gradient `dAL` to keep going backward. As seen in Figure 5, you can now feed in `dAL` into the LINEAR->SIGMOID backward function you implemented (which will use the cached values stored by the L_model_forward function). After that, you will have to use a `for` loop to iterate through all the other layers using the LINEAR->RELU backward function. You should store each dA, dW, and db in the grads dictionary. To do so, use this formula : 
+You can then use this post-activation gradient `dAL` to keep going backward. You can now feed in `dAL` into the LINEAR->SIGMOID backward function you implemented (which will use the cached values stored by the L_model_forward function). After that, you will have to use a `for` loop to iterate through all the other layers using the LINEAR->RELU backward function. You should store each dA, dW, and db in the grads dictionary. To do so, use this formula : 
 
 grads["dW" + str(l)] = dW^{[l]}\tag{15} 
 
@@ -176,16 +171,10 @@ where \alpha is the learning rate. After computing the updated parameters, store
 
 
 ## 5 - Model Architecture
-The input is a (64,64,3) image which is flattened to a vector of size (12288,1).
-The corresponding vector:  [x0,x1,...,x12287]T[x0,x1,...,x12287]T  is then multiplied by the weight matrix  W[1]W[1]  and then you add the intercept  b[1]b[1] . The result is called the linear unit.
-Next, you take the relu of the linear unit. This process could be repeated several times for each  (W[l],b[l])(W[l],b[l])  depending on the model architecture.
-Finally, you take the sigmoid of the final linear unit. If it is greater than 0.5, you classify it to be a cat.
-
 Detailed Architecture of an L-layer deep neural network:
 
 <img src="readmeimages/2.png" title="FVCproductions">
-<caption><center> Figure 6 </center></caption>
+
 
 ## 6 - L-layer Neural Network
 <img src="readmeimages/3.png" title="FVCproductions">
-<caption><center> Figure 7 </center></caption>
