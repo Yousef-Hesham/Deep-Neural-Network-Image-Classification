@@ -38,8 +38,11 @@ import numpy as np #is the fundamental package for scientific computing with Pyt
 import h5py #is a common package to interact with a dataset that is stored on an H5 file.
 import matplotlib.pyplot as plt #matplotlib is a library to plot graphs in Python.
 import scipy
+from PIL import Image
+from scipy import ndimage
 from helper_functions import *
 from math_functions import *
+
 
 plt.rcParams['figure.figsize'] = (5.0, 4.0) # set default size of plots
 plt.rcParams['image.interpolation'] = 'nearest'
@@ -67,6 +70,7 @@ def Display():
     print ("train_y shape: " + str(train_y.shape))
     print ("test_x_orig shape: " + str(test_x_orig.shape))
     print ("test_y shape: " + str(test_y.shape))
+
 
 # FUNCTION: Loading DATA SET
 def load_data():
@@ -190,6 +194,7 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.0075, num_iterations = 30
 
 # Loading Data set
 train_x_orig, train_y, test_x_orig, test_y, classes = load_data()
+num_px = train_x_orig.shape[1]
 
 # Reshape the training and test examples 
 train_x_flatten = train_x_orig.reshape(train_x_orig.shape[0], -1).T   # The "-1" makes reshape flatten the remaining dimensions
@@ -199,9 +204,27 @@ test_x_flatten = test_x_orig.reshape(test_x_orig.shape[0], -1).T
 train_x = train_x_flatten/255.
 test_x = test_x_flatten/255.
 
-
-### CONSTANTS ###
+# CONSTANTS 
 layers_dims = [12288, 20, 7, 5, 1] # INPUT OF DIMS: 12288 AND 4-Hidden layer model
 
+
+# IMPLIMETATION
 parameters = L_layer_model(train_x, train_y, layers_dims, learning_rate = 0.0075 ,num_iterations = 2500, print_cost = True)
-#parameters = L_layer_model(train_x, train_y, layers_dims, learning_rate = 0.0075 ,num_iterations = 2500, print_cost = True)
+pred_train = predict(train_x, train_y, parameters)
+pred_test = predict(test_x, test_y, parameters)
+
+
+#THIS SECTION IS TO TEST YOUR OWN IMAGE / Replace photo.jpeg with you image to test
+my_image = "cat.jpeg" # change this to the name of your image file 
+my_label_y = [1] # the true class of your image (1 -> cat, 0 -> non-cat)
+
+fname = "testimage/" + my_image
+image = np.array(ndimage.imread(fname, flatten=False))
+my_image = scipy.misc.imresize(image, size=(num_px,num_px)).reshape((num_px*num_px*3,1))
+my_image = my_image/255.
+my_predicted_image = predict(my_image, my_label_y, parameters)
+
+plt.imshow(image)
+plt.title("y = " + str(np.squeeze(my_predicted_image)) + ", your L-layer model predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +  "\" picture.")
+print ("y = " + str(np.squeeze(my_predicted_image)) + ", your L-layer model predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +  "\" picture.")
+plt.show()

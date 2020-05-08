@@ -33,12 +33,14 @@ def initialize_parameters_deep(layer_dims):
                     Wl -- weight matrix of shape (layer_dims[l], layer_dims[l-1])
                     bl -- bias vector of shape (layer_dims[l], 1)
     """
+    #np.random.seed(1)
     parameters = {}
     L = len(layer_dims)            # number of layers in the network
 
     for l in range(1, L):
        
-        parameters['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * 0.01
+        #parameters['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * 0.01
+        parameters['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) / np.sqrt(layer_dims[l-1]) #*0.01
         parameters['b' + str(l)] = np.zeros((layer_dims[l], 1))
        
         
@@ -163,7 +165,7 @@ def compute_cost(AL, Y):
     # Compute loss from aL and y.
 
     cost = (-1/m) * np.sum( (Y * np.log(AL)) + ((1-Y) * np.log(1-AL)) ) 
-    
+
     cost = np.squeeze(cost)      # To make sure your cost's shape is what we expect (e.g. this turns [[17]] into 17).
     assert(cost.shape == ())
     
@@ -303,3 +305,4 @@ def update_parameters(parameters, grads, learning_rate):
         parameters["b" + str(l+1)] = parameters["b" + str(l+1)] - learning_rate * grads["db" + str(l+1)]
   
     return parameters
+
